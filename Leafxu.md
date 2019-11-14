@@ -11,9 +11,14 @@
 |注意2|进位问题||
 |方法|头插法+反转单链表 or 尾插法|
 ---------------------------------------------------------
-|Longest-substring-without-repeating-char||
+|Longest-substring (no repeating)||
 |:---|:---|
 |时间复杂度|n^3|
 |二维数组动态分配1|```vector<vector<type>> Arr(n, vector<type>(n));```|
 |二维数组动态分配2|```int **Arr = new int*[n](); for(i=0; i<n; i++>) Arr[i]=new int[n]();```|
 |问题| 通过查表可以降低低时间复杂度但是会带来内存不够用问题|
+---------------------------------------------------------
+|Median-of-two-sorted-array||
+|:---|:---|
+|考查|整数归并算法的合并操作|
+|归并复杂度|nlog(n)|
