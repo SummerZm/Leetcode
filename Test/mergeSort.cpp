@@ -18,10 +18,10 @@ T* mergeSort(T arr[], int len)
 	T* b = new T[len]();
 	if (len<=0 || arr==NULL) return NULL;
 	
-	for (step; step<len; step += step) 
+	for (step; step<len; step += step) // 迭代的步长
 	{
 		pos = 0;
-		for (i=0; i<len; i+=step*2) 
+		for (i=0; i<len; i+=step*2)  // 层次比较
 		{
 			start1 = i;
 			start2 = end1 = min(len, i+step);
@@ -34,53 +34,40 @@ T* mergeSort(T arr[], int len)
 			while (start2<end2)
 				b[pos++] = a[start2++];
 		}
-		displayArray(b, len);
-		// iteration
+		// iteration  比较主体的迭代
 		T* temp = a;
 		a = b;
 		b = temp;
 	}
+	displayArray(a, len);
 	return a;
 }
-/*
-template <typename T>
-T* mergeSort(T arr[], T reg[], int start, int end)
-{
-	int mid, len, pos=start;
-	if (start > end) return NULL; // 结束条件
-	len = end - start + 1;
-	mid = (start+end)/2;
-	mergeSort(arr, reg, start, mid);	// 左半区	[start, mid]
-	mergeSort(arr, reg, mid+1, end);	// 右半区	[mid+1, end)
-	// 处理当前
-	while (start<len && mid<len) 
-		reg[pos++] = arr[start]<arr[mid] ? arr[start++] : arr[mid++];
-	while (start<len)
-		reg[pos++] = arr[start++];
-	while (mid<len)
-		reg[pos++] = arr[mid++];
-}*/
-/*
-template <typename T>
-void mergeSort(T arr[], T reg[], int start, int end)
-{
-	int len, mid, pos;
-	if (start>=end) return;
-	len = end - start;
-	mid = (start + end)/2;
-	std::cout<<start<<" "<<mid<<" "<<end<<endl;
-	mergeSort(arr, reg, start, mid);
-	mergeSort(arr, reg, mid, end);
-	pos = start;
-	while (start<len && mid<len)
-		reg[pos++] = arr[start]<arr[mid] ? arr[start++] : arr[mid++];
-	while (start<len)
-		reg[pos++] = arr[start++];
-	while (mid<len)
-		reg[pos++] = arr[mid++];
-	displayArray(reg, 9);
-}*/
 
+template <typename T>
+void mergeSort(T arr[], T reg[], int begin, int len)
+{
+	int start1, start2, end1, end2, pos, step;
+	if (begin+1>=len) return;
+	start1 = begin;
+	//start2 = end1 = min(len, (begin+len) / 2);
+	start2 = end1 = (begin+len) / 2;
+	end2 = len;
+	// 处理区间保持一致 [x, y)
+	mergeSort(arr, reg, start1, end1); // [start1, end1)
+	mergeSort(arr, reg, start2, end2); // [start2, end2)
+	pos = start1;
+	while (start1<end1 && start2<end2)
+		reg[pos++] = arr[start1]<arr[start2] ? arr[start1++] : arr[start2++];
+	while (start1 < end1)
+		reg[pos++] = arr[start1++];
+	while (start2 < end2)
+		reg[pos++] = arr[start2++];
+
+	while(begin<len) {	// 递归主体的同步
+		arr[begin] = reg[begin];
+		begin++;
+	}
+}
 
 template <typename T>
 void displayArray(T arr[], int len) {
@@ -91,15 +78,22 @@ void displayArray(T arr[], int len) {
 	std::cout<<std::endl;
 }
 
+void testMergeSort()
+{
+	int arr[] = {5,7,3,4,1, 10, 12, 9, 2};
+	mergeSort(arr, 9);
+}
+
+void testMergeSort1()
+{
+	int arr[] = {5,7,3,4,1, 10, 12, 9};
+	int *result = new int[8]();
+	mergeSort(arr, result, 0 , 8);
+	displayArray(result, 8);
+}
 int main(int argc, char** agrv) 
 {
-	int i = 0;
-	int arr[] = {5,7,3,4,1, 10, 12, 9, 0};
-	int *result = NULL;
-	int *result1 = new int[9]();
-	displayArray(arr, 9);
-	//result = mergeSort(arr, 9);
-	mergeSort(arr, result1, 0 , 9);
-	displayArray(result1, 9);
+	testMergeSort();
+	testMergeSort1();
 	return 0;
 }
